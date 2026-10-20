@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petualangan Dunia Warna - Seni Rupa Kelas 1 SD</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandYellow: '#FFD166',
+                        brandPink: '#EF476F',
+                        brandBlue: '#118AB2',
+                        brandGreen: '#06D6A0',
+                        brandPurple: '#8338EC',
+                        brandOrange: '#FF9F1C'
+                    },
+                    fontFamily: {
+                        fredoka: ['"Fredoka One"', 'cursive'],
+                        quicksand: ['Quicksand', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #f4f9ff;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .font-title {
+            font-family: 'Fredoka One', cursive;
+        }
+        .btn-bounce {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .btn-bounce:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+        .btn-bounce:active {
+            transform: translateY(2px) scale(0.98);
+        }
+        .card-pop {
+            transition: transform 0.3s ease;
+        }
+        .card-pop:hover {
+            transform: translateY(-6px);
+        }
+        .pulse-slow {
+            animation: pulse 3s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.04); }
+        }
+        .glow-effect {
+            box-shadow: 0 0 25px rgba(255, 209, 102, 0.8);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between overflow-x-hidden text-slate-800">
+
+    <!-- HEADER NAVIGASI -->
+    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b-4 border-yellow-400 shadow-sm px-4 py-3">
+        <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-2">
+            <!-- Logo & Title -->
+            <button onclick="navigateto('beranda')" class="flex items-center space-x-3 text-left focus:outline-none">
+                <div class="w-12 h-12 rounded-full bg-yellow-400 flex items-center justify-center text-white text-2xl font-bold shadow-md border-2 border-white">
+                    🎨
+                </div>
+                <div>
+                    <h1 class="font-title text-xl md:text-2xl text-pink-500 leading-tight">PETUALANGAN DUNIA WARNA</h1>
+                    <p class="text-xs md:text-sm text-slate-500 font-semibold">Seni Rupa Kelas 1 SD/MI</p>
+                </div>
+            </button>
+
+            <!-- Navigation Links -->
+            <nav class="flex items-center space-x-1 md:space-x-2 overflow-x-auto py-1">
+                <button onclick="navigateto('beranda')" class="nav-btn bg-pink-100 hover:bg-pink-200 text-pink-700 px-3 py-1.5 rounded-full text-xs md:text-sm font-bold flex items-center gap-1 transition">
+                    <i class="fas fa-home"></i> <span>Beranda</span>
+                </button>
+                <button onclick="navigateto('materi-1')" class="nav-btn bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1.5 rounded-full text-xs md:text-sm font-bold flex items-center gap-1 transition">
+                    <i class="fas fa-book-open"></i> <span>Materi</span>
+                </button>
+                <button onclick="navigateto('simulasi-campur')" class="nav-btn bg-purple-100 hover:bg-purple-200 text-purple-700 px-3 py-1.5 rounded-full text-xs md:text-sm font-bold flex items-center gap-1 transition">
+                    <i class="fas fa-flask"></i> <span>Simulasi</span>
+                </button>
+                <button onclick="navigateto('kuis')" class="nav-btn bg-amber-100 hover:bg-amber-200 text-amber-700 px-3 py-1.5 rounded-full text-xs md:text-sm font-bold flex items-center gap-1 transition">
+                    <i class="fas fa-brain"></i> <span>Kuis</span>
+                </button>
+                <button onclick="navigateto('game')" class="nav-btn bg-emerald-100 hover:bg-emerald-200 text-emerald-700 px-3 py-1.5 rounded-full text-xs md:text-sm font-bold flex items-center gap-1 transition">
+                    <i class="fas fa-gamepad"></i> <span>Game</span>
+                </button>
+                <button onclick="navigateto('hasil')" class="nav-btn bg-orange-100 hover:bg-orange-200 text-orange-700 px-3 py-1.5 rounded-full text-xs md:text-sm font-bold flex items-center gap-1 transition">
+                    <i class="fas fa-trophy"></i> <span>Hasil</span>
+                </button>
+                <!-- Sound Toggle -->
+                <button id="soundToggleBtn" onclick="toggleSound()" class="bg-gray-100 hover:bg-gray-200 text-slate-700 p-2 rounded-full text-sm font-bold ml-1 transition" title="Suara">
+                    <i class="fas fa-volume-up text-pink-500"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="flex-grow max-w-6xl w-full mx-auto p-4 md:p-6">
+        
+        <!-- COMPONENT: Kak Warna Character Banner -->
+        <div id="characterBanner" class="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 rounded-3xl p-4 md:p-6 text-white mb-6 shadow-lg flex flex-col md:flex-row items-center gap-4 relative overflow-hidden">
+            <div class="absolute -right-8 -top-8 w-32 h-32 bg-white/20 rounded-full blur-xl"></div>
+            
+            <!-- Avatar Kak Warna 3D SVG -->
+            <div class="w-24 h-24 md:w-32 md:h-32 bg-white rounded-2xl shadow-md p-2 flex-shrink-0 flex items-center justify-center relative border-4 border-yellow-300">
+                <svg viewBox="0 0 100 100" class="w-full h-full">
+                    <!-- Head -->
+                    <circle cx="50" cy="45" r="32" fill="#FFD1DC" />
+                    <!-- Hair (Rainbow Beret & Hair) -->
+                    <path d="M 20 40 Q 50 15 80 40 Z" fill="#8338EC" />
+                    <ellipse cx="50" cy="22" rx="22" ry="10" fill="#FF477E" />
+                    <circle cx="50" cy="12" r="5" fill="#FFD166" />
+                    <!-- Eyes -->
+                    <circle cx="38" cy="42" r="5" fill="#2B2D42" />
+                    <circle cx="62" cy="42" r="5" fill="#2B2D42" />
+                    <circle cx="40" cy="40" r="1.5" fill="#FFF" />
+                    <circle cx="64" cy="40" r="1.5" fill="#FFF" />
+                    <!-- Cheeks -->
+                    <circle cx="32" cy="50" r="4" fill="#FF85A1" opacity="0.6" />
+                    <circle cx="68" cy="50" r="4" fill="#FF85A1" opacity="0.6" />
+                    <!-- Smile -->
+                    <path d="M 40 55 Q 50 65 60 55" fill="none" stroke="#2B2D42" stroke-width="3" stroke-linecap="round" />
+                    <!-- Artist Paint Smudge -->
+                    <circle cx="30" cy="38" r="3" fill="#06D6A0" />
+                    <circle cx="70" cy="46" r="2.5" fill="#FF9F1C" />
+                    <!-- Body / Shirt -->
+                    <path d="M 28 75 Q 50 68 72 75 L 80 100 L 20 100 Z" fill="#FFD166" />
+                    <!-- Paint Palette Icon Badge -->
+                    <circle cx="50" cy="85" r="8" fill="#118AB2" />
+                </svg>
+                <span class="absolute -bottom-2 bg-yellow-400 text-slate-800 text-[10px] font-bold px-2 py-0.5 rounded-full shadow border border-white">Kak Warna</span>
+            </div>
+
+            <!-- Bubble Text -->
+            <div class="flex-grow text-center md:text-left">
+                <div class="bg-white/20 backdrop-blur-md rounded-2xl p-3 md:p-4 border border-white/30">
+                    <p id="kakWarnaText" class="text-base md:text-lg font-semibold text-white drop-shadow">
+                        "Halo, teman-teman! Yuk, kita menjelajahi dunia warna dan menjadi jagoan seni rupa!"
+                    </p>
+                </div>
+            </div>
+            
+            <button onclick="speakKakWarna()" class="bg-yellow-400 hover:bg-yellow-300 text-slate-800 font-bold px-4 py-2 rounded-xl text-xs md:text-sm shadow flex items-center gap-2 self-center md:self-auto flex-shrink-0 transition">
+                <i class="fas fa-volume-up"></i> Dengarkan
+            </button>
+        </div>
+
+        <!-- HALAMAN 1: BERANDA -->
+        <section id="page-beranda" class="page-content space-y-6">
+            <div class="text-center space-y-2 py-4">
+                <h2 class="font-title text-3xl md:text-5xl text-pink-500 drop-shadow-sm">PETUALANGAN DUNIA WARNA</h2>
+                <p class="text-lg md:text-xl font-bold text-blue-600">Belajar Warna, Bermain, dan Berkreasi!</p>
+                <div class="w-24 h-1.5 bg-yellow-400 mx-auto rounded-full mt-2"></div>
+            </div>
+
+            <!-- Progress Indicator -->
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-700 text-sm">Kemajuan Belajar Kamu</h4>
+                        <p id="progressText" class="text-xs text-slate-500">Selesaikan materi & kuis untuk mengumpulkan lencana!</p>
+                    </div>
+                </div>
+                <div class="w-full md:w-1/3 bg-slate-100 h-4 rounded-full overflow-hidden p-0.5 border border-slate-200">
+                    <div id="progressBar" class="bg-gradient-to-r from-yellow-400 to-emerald-400 h-full rounded-full transition-all duration-500" style="width: 15%;"></div>
+                </div>
+            </div>
+
+            <!-- Main Menu Buttons Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 pt-2">
+                <!-- 1. Mulai Belajar -->
+                <button onclick="navigateto('materi-1')" class="btn-bounce bg-gradient-to-br from-pink-500 to-rose-400 text-white p-6 rounded-3xl shadow-lg border-b-4 border-rose-600 flex flex-col items-center justify-center space-y-3 group">
+                    <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center text-3xl group-hover:scale-110 transition">🚀</div>
+                    <span class="font-title text-base md:text-lg">MULAI BELAJAR</span>
+                </button>
+
+                <!-- 2. Materi Warna -->
+                <button onclick="navigateto('materi-1')" class="btn-bounce bg-gradient-to-br from-blue-500 to-indigo-500 text-white p-6 rounded-3xl shadow-lg border-b-4 border-indigo-700 flex flex-col items-center justify-center space-y-3 group">
+                    <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center text-3xl group-hover:scale-110 transition">📚</div>
+                    <span class="font-title text-base md:text-lg">MATERI WARNA</span>
+                </button>
+
+                <!-- 3. Simulasi Warna -->
+                <button onclick="navigateto('simulasi-campur')" class="btn-bounce bg-gradient-to-br from-purple-500 to-violet-600 text-white p-6 rounded-3xl shadow-lg border-b-4 border-purple-800 flex flex-col items-center justify-center space-y-3 group">
+                    <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center text-3xl group-hover:scale-110 transition">🧪</div>
+                    <span class="font-title text-base md:text-lg">SIMULASI WARNA</span>
+                </button>
+
+                <!-- 4. Kuis Cerdas -->
+                <button onclick="navigateto('kuis')" class="btn-bounce bg-gradient-to-br from-amber-400 to-orange-500 text-white p-6 rounded-3xl shadow-lg border-b-4 border-orange-700 flex flex-col items-center justify-center space-y-3 group">
+                    <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center text-3xl group-hover:scale-110 transition">💡</div>
+                    <span class="font-title text-base md:text-lg">KUIS CERDAS</span>
+                </button>
+
+                <!-- 5. Game Warna -->
+                <button onclick="navigateto('game')" class="btn-bounce bg-gradient-to-br from-emerald-400 to-teal-600 text-white p-6 rounded-3xl shadow-lg border-b-4 border-teal-800 flex flex-col items-center justify-center space-y-3 group">
+                    <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center text-3xl group-hover:scale-110 transition">🎮</div>
+                    <span class="font-title text-base md:text-lg">GAME WARNA</span>
+                </button>
+
+                <!-- 6. Hasil Belajar -->
+                <button onclick="navigateto('hasil')" class="btn-bounce bg-gradient-to-br from-red-400 to-pink-600 text-white p-6 rounded-3xl shadow-lg border-b-4 border-pink-800 flex flex-col items-center justify-center space-y-3 group">
+                    <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center text-3xl group-hover:scale-110 transition">🏆</div>
+                    <span class="font-title text-base md:text-lg">HASIL BELAJAR</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- HALAMAN 2: PENGERTIAN WARNA -->
+        <section id="page-materi-1" class="page-content hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 shadow-md border border-slate-100 space-y-6">
+                <div class="flex items-center justify-between border-b pb-4">
+                    <div class="flex items-center space-x-3">
+                        <span class="bg-pink-100 text-pink-600 font-title px-4 py-1.5 rounded-full text-sm">Materi 1</span>
+                        <h2 class="font-title text-2xl md:text-3xl text-slate-800">Apa Itu Warna?</h2>
+                    </div>
+                    <button onclick="speakText('Materi 1: Apa itu Warna? Warna adalah kesan yang kita lihat dengan mata. Kita dapat melihat warna benda ketika ada cahaya.')" class="text-pink-500 hover:text-pink-600 text-xl p-2"><i class="fas fa-volume-up"></i></button>
+                </div>
+
+                <!-- Explanation Box Card -->
+                <div class="bg-amber-50 border-2 border-amber-200 rounded-2xl p-4 text-slate-700 text-base md:text-lg leading-relaxed">
+                    <p class="font-medium">
+                        ✨ <strong>Warna</strong> adalah kesan yang kita lihat dengan mata. Kita dapat melihat warna benda ketika ada <strong>cahaya</strong>. Warna membantu gambar terlihat lebih jelas dan menarik! 🌈
+                    </p>
+                </div>
+
+                <!-- Interactive Objects Grid -->
+                <div>
+                    <h3 class="font-title text-lg text-slate-700 mb-3">Tekan benda di bawah untuk melihat & mendengar namanya:</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+                        <!-- Object 1 -->
+                        <button onclick="showObjectDetail('Apel Merah', 'Merah', '🍎', 'Apel ini berwarna merah yang cerah!')" class="card-pop bg-red-50 hover:bg-red-100 border-2 border-red-300 p-4 rounded-2xl flex flex-col items-center text-center space-y-2">
+                            <span class="text-5xl">🍎</span>
+                            <span class="font-bold text-red-600 text-sm">Apel</span>
+                            <span class="text-xs bg-red-500 text-white px-2 py-0.5 rounded-full">Merah</span>
+                        </button>
+                        <!-- Object 2 -->
+                        <button onclick="showObjectDetail('Pisang Kuning', 'Kuning', '🍌', 'Pisang matang berwarna kuning!')" class="card-pop bg-yellow-50 hover:bg-yellow-100 border-2 border-yellow-300 p-4 rounded-2xl flex flex-col items-center text-center space-y-2">
+                            <span class="text-5xl">🍌</span>
+                            <span class="font-bold text-yellow-600 text-sm">Pisang</span>
+                            <span class="text-xs bg-yellow-500 text-slate-800 px-2 py-0.5 rounded-full">Kuning</span>
+                        </button>
+                        <!-- Object 3 -->
+                        <button onclick="showObjectDetail('Daun Hijau', 'Hijau', '🍃', 'Daun tanaman ini berwarna hijau segar!')" class="card-pop bg-emerald-50 hover:bg-emerald-100 border-2 border-emerald-300 p-4 rounded-2xl flex flex-col items-center text-center space-y-2">
+                            <span class="text-5xl">🍃</span>
+                            <span class="font-bold text-emerald-600 text-sm">Daun</span>
+                            <span class="text-xs bg-emerald-500 text-white px-2 py-0.5 rounded-full">Hijau</span>
+                        </button>
+                        <!-- Object 4 -->
+                        <button onclick="showObjectDetail('Langit Biru', 'Biru', '🌤️', 'Langit siang hari tampak berwarna biru!')" class="card-pop bg-blue-50 hover:bg-blue-100 border-2 border-blue-300 p-4 rounded-2xl flex flex-col items-center text-center space-y-2">
+                            <span class="text-5xl">🌤️</span>
+                            <span class="font-bold text-blue-600 text-sm">Langit</span>
+                            <span class="text-xs bg-blue-500 text-white px-2 py-0.5 rounded-full">Biru</span>
+                        </button>
+                        <!-- Object 5 -->
+                        <button onclick="showObjectDetail('Awan Putih', 'Putih', '☁️', 'Awan bersih di langit berwarna putih!')" class="card-pop bg-slate-50 hover:bg-slate-100 border-2 border-slate-300 p-4 rounded-2xl flex flex-col items-center text-center space-y-2">
+                            <span class="text-5xl">☁️</span>
+                            <span class="font-bold text-slate-600 text-sm">Awan</span>
+                            <span class="text-xs bg-slate-400 text-white px-2 py-0.5 rounded-full">Putih</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Detail Display Modal/Box -->
+                <div id="objectDetailBox" class="hidden bg-gradient-to-r from-pink-100 to-purple-100 p-4 rounded-2xl border-2 border-pink-300 flex items-center space-x-4">
+                    <span id="detailEmoji" class="text-5xl">🍎</span>
+                    <div>
+                        <h4 id="detailTitle" class="font-title text-lg text-slate-800">Apel Merah</h4>
+                        <p id="detailDesc" class="text-slate-600 text-sm">Penjelasan singkat benda...</p>
+                    </div>
+                </div>
+
+                <!-- Interactive Activity 1 -->
+                <div class="bg-blue-50 border-2 border-blue-200 p-5 rounded-2xl space-y-4">
+                    <h3 class="font-title text-blue-800 text-lg">🎯 Aktivitas Mini: "Yuk, cari benda yang berwarna merah!"</h3>
+                    <div class="grid grid-cols-3 gap-3" id="redMiniGame">
+                        <button onclick="checkRedMiniGame(false, 'Pisang berwarna kuning!')" class="bg-white p-4 rounded-xl border border-blue-200 text-3xl text-center hover:scale-105 transition">🍌</button>
+                        <button onclick="checkRedMiniGame(true, 'Hebat! Apel berwarna MERAH!')" class="bg-white p-4 rounded-xl border border-blue-200 text-3xl text-center hover:scale-105 transition">🍎</button>
+                        <button onclick="checkRedMiniGame(false, 'Daun berwarna hijau!')" class="bg-white p-4 rounded-xl border border-blue-200 text-3xl text-center hover:scale-105 transition">🍃</button>
+                    </div>
+                    <div id="redMiniFeedback" class="hidden p-3 rounded-xl font-bold text-center text-sm"></div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="flex justify-between items-center pt-4">
+                    <button onclick="navigateto('beranda')" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-5 py-2.5 rounded-xl font-bold text-sm">
+                        <i class="fas fa-arrow-left mr-1"></i> Beranda
+                    </button>
+                    <button onclick="navigateto('materi-2')" class="bg-pink-500 hover:bg-pink-600 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow">
+                        Selanjutnya <i class="fas fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- HALAMAN 3: WARNA PRIMER -->
+        <section id="page-materi-2" class="page-content hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 shadow-md border border-slate-100 space-y-6">
+                <div class="flex items-center justify-between border-b pb-4">
+                    <div class="flex items-center space-x-3">
+                        <span class="bg-blue-100 text-blue-600 font-title px-4 py-1.5 rounded-full text-sm">Materi 2</span>
+                        <h2 class="font-title text-2xl md:text-3xl text-slate-800">Mengenal Warna Primer</h2>
+                    </div>
+                    <button onclick="speakText('Materi 2: Mengenal Warna Primer. Warna primer adalah warna utama yang tidak diperoleh dari campuran warna lain. Warna primer adalah merah, biru, dan kuning.')" class="text-blue-500 hover:text-blue-600 text-xl p-2"><i class="fas fa-volume-up"></i></button>
+                </div>
+
+                <div class="bg-blue-50 border-2 border-blue-200 rounded-2xl p-4 text-slate-700 text-base md:text-lg">
+                    <p class="font-medium">
+                        👑 <strong>Warna Primer</strong> adalah warna utama yang tidak dapat dibuat dari campuran warna lain. 
+                        Ketiga warna ini adalah warna ajaib yang bisa dicampur untuk membuat warna lain!
+                    </p>
+                </div>
+
+                <!-- 3 Big Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Red -->
+                    <button onclick="showPrimaryExamples('Merah', '🍎 Stroberi, 🚗 Mobil Balap, 🎈 Balon', '#EF476F')" class="card-pop bg-red-500 text-white p-6 rounded-3xl shadow-md border-b-8 border-red-700 text-left space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="font-title text-2xl">MERAH</span>
+                            <span class="text-3xl">🔴</span>
+                        </div>
+                        <p class="text-xs text-red-100">Tekan untuk lihat contoh benda!</p>
+                    </button>
+
+                    <!-- Blue -->
+                    <button onclick="showPrimaryExamples('Biru', '🐳 Paus, 👖 Celana Jeans, 🫐 Stoberi Biru', '#118AB2')" class="card-pop bg-blue-500 text-white p-6 rounded-3xl shadow-md border-b-8 border-blue-700 text-left space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="font-title text-2xl">BIRU</span>
+                            <span class="text-3xl">🔵</span>
+                        </div>
+                        <p class="text-xs text-blue-100">Tekan untuk lihat contoh benda!</p>
+                    </button>
+
+                    <!-- Yellow -->
+                    <button onclick="showPrimaryExamples('Kuning', '🌻 Bunga Matahari, 🐤 Anak Ayam, 🍋 Lemon', '#FFD166')" class="card-pop bg-yellow-400 text-slate-800 p-6 rounded-3xl shadow-md border-b-8 border-yellow-600 text-left space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="font-title text-2xl">KUNING</span>
+                            <span class="text-3xl">🟡</span>
+                        </div>
+                        <p class="text-xs text-slate-700">Tekan untuk lihat contoh benda!</p>
+                    </button>
+                </div>
+
+                <!-- Primary Examples Modal/Box -->
+                <div id="primaryExamplesBox" class="hidden bg-slate-100 p-4 rounded-2xl border-2 border-slate-300">
+                    <h4 id="primaryTitle" class="font-title text-lg text-slate-800 mb-1">Contoh Benda</h4>
+                    <p id="primaryDesc" class="text-slate-700 font-semibold"></p>
+                </div>
+
+                <!-- Activity: Select 3 Primary Colors -->
+                <div class="bg-purple-50 border-2 border-purple-200 p-5 rounded-2xl space-y-4">
+                    <h3 class="font-title text-purple-800 text-lg">🎯 Tantangan: "Pilih 3 Warna Primer di bawah ini!"</h3>
+                    <div class="grid grid-cols-3 sm:grid-cols-6 gap-3" id="primaryCheckGrid">
+                        <button onclick="togglePrimaryPick(this, 'merah')" class="p flex flex-col items-center bg-white p-3 rounded-2xl border-2 border-slate-200 text-sm font-bold">
+                            <div class="w-10 h-10 rounded-full bg-red-500 mb-2"></div> Merah
+                        </button>
+                        <button onclick="togglePrimaryPick(this, 'hijau')" class="p flex flex-col items-center bg-white p-3 rounded-2xl border-2 border-slate-200 text-sm font-bold">
+                            <div class="w-10 h-10 rounded-full bg-emerald-500 mb-2"></div> Hijau
+                        </button>
+                        <button onclick="togglePrimaryPick(this, 'kuning')" class="p flex flex-col items-center bg-white p-3 rounded-2xl border-2 border-slate-200 text-sm font-bold">
+                            <div class="w-10 h-10 rounded-full bg-yellow-400 mb-2"></div> Kuning
+                        </button>
+                        <button onclick="togglePrimaryPick(this, 'ungu')" class="p flex flex-col items-center bg-white p-3 rounded-2xl border-2 border-slate-200 text-sm font-bold">
+                            <div class="w-10 h-10 rounded-full bg-purple-500 mb-2"></div> Ungu
+                        </button>
+                        <button onclick="togglePrimaryPick(this, 'biru')" class="p flex flex-col items-center bg-white p-3 rounded-2xl border-2 border-slate-200 text-sm font-bold">
+                            <div class="w-10 h-10 rounded-full bg-blue-500 mb-2"></div> Biru
+                        </button>
+                        <button onclick="togglePrimaryPick(this, 'oranye')" class="p flex flex-col items-center bg-white p-3 rounded-2xl border-2 border-slate-200 text-sm font-bold">
+                            <div class="w-10 h-10 rounded-full bg-orange-500 mb-2"></div> Oranye
+                        </button>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <button onclick="checkPrimaryPickAnswer()" class="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2 rounded-xl font-bold text-sm shadow">
+                            Periksa Jawaban
+                        </button>
+                        <span id="primaryPickFeedback" class="font-bold text-sm"></span>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="flex justify-between items-center pt-4">
+                    <button onclick="navigateto('materi-1')" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-5 py-2.5 rounded-xl font-bold text-sm">
+                        <i class="fas fa-arrow-left mr-1"></i> Sebelumnya
+                    </button>
+                    <button onclick="navigateto('materi-3')" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow">
+                        Selanjutnya <i class="fas fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- HALAMAN 4: WARNA SEKUNDER & SIMULASI -->
+        <section id="page-materi-3" class="page-content hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 shadow-md border border-slate-100 space-y-6">
+                <div class="flex items-center justify-between border-b pb-4">
+                    <div class="flex items-center space-x-3">
+                        <span class="bg-purple-100 text-purple-600 font-title px-4 py-1.5 rounded-full text-sm">Materi 3</span>
+                        <h2 class="font-title text-2xl md:text-3xl text-slate-800">Ayo Mencampur Warna Sekunder!</h2>
+                    </div>
+                    <button onclick="speakText('Materi 3: Warna sekunder adalah warna yang dihasilkan dari campuran dua warna primer.')" class="text-purple-500 text-xl p-2"><i class="fas fa-volume-up"></i></button>
+                </div>
+
+                <div class="bg-purple-50 border-2 border-purple-200 rounded-2xl p-4 text-slate-700">
+                    <p class="font-medium">
+                        🧪 <strong>Warna Sekunder</strong> adalah warna yang dihasilkan dari pencampuran <strong>2 warna primer</strong> dengan jumlah seimbang!
+                    </p>
+                </div>
+
+                <!-- Interactive Color Mixer Component -->
+                <div class="bg-slate-900 rounded-3xl p-6 text-white space-y-6 border-4 border-purple-400">
+                    <h3 class="font-title text-xl text-center text-yellow-300">🧪 Laboratorium Pencampur Warna Cat</h3>
+                    
+                    <div class="flex flex-col md:flex-row items-center justify-center gap-6">
+                        <!-- Select Color 1 -->
+                        <div class="text-center space-y-2">
+                            <p class="text-xs text-slate-300 font-bold">Warna Pertama (Primer)</p>
+                            <div class="flex gap-2">
+                                <button onclick="selectMixColor(1, '#EF476F', 'Merah')" class="mix-btn-1 w-12 h-12 rounded-full bg-red-500 border-4 border-white shadow hover:scale-110 transition"></button>
+                                <button onclick="selectMixColor(1, '#FFD166', 'Kuning')" class="mix-btn-1 w-12 h-12 rounded-full bg-yellow-400 border-4 border-white shadow hover:scale-110 transition"></button>
+                                <button onclick="selectMixColor(1, '#118AB2', 'Biru')" class="mix-btn-1 w-12 h-12 rounded-full bg-blue-500 border-4 border-white shadow hover:scale-110 transition"></button>
+                            </div>
+                            <span id="labelColor1" class="text-sm font-bold text-pink-300 block">Pilih...</span>
+                        </div>
+
+                        <span class="text-3xl font-title text-yellow-400">+</span>
+
+                        <!-- Select Color 2 -->
+                        <div class="text-center space-y-2">
+                            <p class="text-xs text-slate-300 font-bold">Warna Kedua (Primer)</p>
+                            <div class="flex gap-2">
+                                <button onclick="selectMixColor(2, '#EF476F', 'Merah')" class="mix-btn-2 w-12 h-12 rounded-full bg-red-500 border-4 border-white shadow hover:scale-110 transition"></button>
+                                <button onclick="selectMixColor(2, '#FFD166', 'Kuning')" class="mix-btn-2 w-12 h-12 rounded-full bg-yellow-400 border-4 border-white shadow hover:scale-110 transition"></button>
+                                <button onclick="selectMixColor(2, '#118AB2', 'Biru')" class="mix-btn-2 w-12 h-12 rounded-full bg-blue-500 border-4 border-white shadow hover:scale-110 transition"></button>
+                            </div>
+                            <span id="labelColor2" class="text-sm font-bold text-yellow-300 block">Pilih...</span>
+                        </div>
+
+                        <span class="text-3xl font-title text-yellow-400">=</span>
+
+                        <!-- Result Container Container -->
+                        <div class="text-center space-y-2">
+                            <p class="text-xs text-slate-300 font-bold">Hasil Campuran</p>
+                            <div id="mixJarResult" class="w-20 h-24 bg-white/20 border-4 border-white/50 rounded-b-3xl rounded-t-xl mx-auto flex items-end justify-center p-2 relative overflow-hidden shadow-inner">
+                                <div id="mixLiquid" class="w-full h-0 bg-slate-400 rounded-b-2xl transition-all duration-1000"></div>
+                            </div>
+                            <span id="labelMixResult" class="font-title text-lg text-emerald-400 block">???</span>
+                        </div>
+                    </div>
+
+                    <div class="text-center pt-2">
+                        <button onclick="resetColorMixer()" class="bg-pink-500 hover:bg-pink-600 text-white font-bold px-6 py-2.5 rounded-full text-sm shadow">
+                            🔄 COBA CAMPUR LAGI
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3 Key Formula Summary -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-orange-50 border-2 border-orange-200 p-4 rounded-2xl flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-orange-500 flex-shrink-0"></div>
+                        <div>
+                            <h4 class="font-title text-orange-800 text-sm">Merah + Kuning</h4>
+                            <p class="text-xs text-slate-600 font-bold">= ORANYE 🍊</p>
+                        </div>
+                    </div>
+                    <div class="bg-emerald-50 border-2 border-emerald-200 p-4 rounded-2xl flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-emerald-500 flex-shrink-0"></div>
+                        <div>
+                            <h4 class="font-title text-emerald-800 text-sm">Biru + Kuning</h4>
+                            <p class="text-xs text-slate-600 font-bold">= HIJAU 🍃</p>
+                        </div>
+                    </div>
+                    <div class="bg-purple-50 border-2 border-purple-200 p-4 rounded-2xl flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-purple-500 flex-shrink-0"></div>
+                        <div>
+                            <h4 class="font-title text-purple-800 text-sm">Merah + Biru</h4>
+                            <p class="text-xs text-slate-600 font-bold">= UNGU 🍇</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="flex justify-between items-center pt-4">
+                    <button onclick="navigateto('materi-2')" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-5 py-2.5 rounded-xl font-bold text-sm">
+                        <i class="fas fa-arrow-left mr-1"></i> Sebelumnya
+                    </button>
+                    <button onclick="navigateto('materi-4')" class="bg-purple-500 hover:bg-purple-600 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow">
+                        Selanjutnya <i class="fas fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- HALAMAN 5: WARNA TERSIER -->
+        <section id="page-materi-4" class="page-content hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 shadow-md border border-slate-100 space-y-6">
+                <div class="flex items-center justify-between border-b pb-4">
+                    <div class="flex items-center space-x-3">
+                        <span class="bg-emerald-100 text-emerald-600 font-title px-4 py-1.5 rounded-full text-sm">Materi 4</span>
+                        <h2 class="font-title text-2xl md:text-3xl text-slate-800">Mengenal Warna Tersier</h2>
+                    </div>
+                    <button onclick="speakText('Materi 4: Warna tersier adalah warna yang dibuat dengan mencampurkan satu warna primer dan satu warna sekunder.')" class="text-emerald-500 text-xl p-2"><i class="fas fa-volume-up"></i></button>
+                </div>
+
+                <div class="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-4 text-slate-700">
+                    <p class="font-medium">
+                        🎨 <strong>Warna Tersier</strong> adalah warna ketiga! Dibuat dengan mencampur <strong>1 warna primer</strong> + <strong>1 warna sekunder</strong>.
+                    </p>
+                </div>
+
+                <!-- 6 Examples Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    <div class="bg-slate-50 p-4 rounded-2xl border flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full border-2 border-white shadow" style="background-color: #FF4500;"></div>
+                        <div class="text-xs">
+                            <p class="font-bold text-slate-800">Merah + Oranye</p>
+                            <p class="text-slate-500">Merah Keoranyean</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-2xl border flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full border-2 border-white shadow" style="background-color: #FFA500;"></div>
+                        <div class="text-xs">
+                            <p class="font-bold text-slate-800">Kuning + Oranye</p>
+                            <p class="text-slate-500">Kuning Keoranyean</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-2xl border flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full border-2 border-white shadow" style="background-color: #9ACD32;"></div>
+                        <div class="text-xs">
+                            <p class="font-bold text-slate-800">Kuning + Hijau</p>
+                            <p class="text-slate-500">Kuning Kehijauan</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-2xl border flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full border-2 border-white shadow" style="background-color: #00A896;"></div>
+                        <div class="text-xs">
+                            <p class="font-bold text-slate-800">Biru + Hijau</p>
+                            <p class="text-slate-500">Biru Kehijauan</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-2xl border flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full border-2 border-white shadow" style="background-color: #483D8B;"></div>
+                        <div class="text-xs">
+                            <p class="font-bold text-slate-800">Biru + Ungu</p>
+                            <p class="text-slate-500">Biru Keunguan</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-2xl border flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full border-2 border-white shadow" style="background-color: #C71585;"></div>
+                        <div class="text-xs">
+                            <p class="font-bold text-slate-800">Merah + Ungu</p>
+                            <p class="text-slate-500">Merah Keunguan</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-yellow-50 p-3 rounded-xl border border-yellow-200 text-xs text-slate-600 italic">
+                    ℹ️ *Catatan Pembelajaran: Warna di atas adalah ilustrasi edukasi. Hasil campuran cat asli dapat bervariasi tergantung jenis pigmen.*
+                </div>
+
+                <!-- Navigation -->
+                <div class="flex justify-between items-center pt-4">
+                    <button onclick="navigateto('materi-3')" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-5 py-2.5 rounded-xl font-bold text-sm">
+                        <i class="fas fa-arrow-left mr-1"></i> Sebelumnya
+                    </button>
+                    <button onclick="navigateto('materi-5')" class="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow">
+                        Selanjutnya <i class="fas fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- HALAMAN 6: GELAP DAN TERANG -->
+        <section id="page-materi-5" class="page-content hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 shadow-md border border-slate-100 space-y-6">
+                <div class="flex items-center justify-between border-b pb-4">
+                    <div class="flex items-center space-x-3">
+                        <span class="bg-amber-100 text-amber-600 font-title px-4 py-1.5 rounded-full text-sm">Materi 5</span>
+                        <h2 class="font-title text-2xl md:text-3xl text-slate-800">Mengapa Ada Warna Gelap dan Terang?</h2>
+                    </div>
+                    <button onclick="speakText('Materi 5: Gelap dan terang terjadi karena adanya cahaya. Bagian yang kena cahaya lebih terang, dan bayangan lebih gelap.')" class="text-amber-500 text-xl p-2"><i class="fas fa-volume-up"></i></button>
+                </div>
+
+                <div class="bg-amber-50 border-2 border-amber-200 rounded-2xl p-4 text-slate-700 text-base">
+                    <p class="font-medium">
+                        💡 Perbedaan <strong>gelap dan terang</strong> terjadi karena perbedaan pancaran <strong>cahaya</strong> pada benda.
+                        Bagian yang terkena cahaya tampak terang, sedangkan bagian bayangan tampak gelap!
+                    </p>
+                </div>
+
+                <!-- 2 Sub-Topics Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-slate-900 text-white p-5 rounded-2xl space-y-3">
+                        <h3 class="font-title text-lg text-slate-200">⬛ 1. Gelap (Warna Tua)</h3>
+                        <p class="text-xs text-slate-300">Contoh: Hitam & Abu-abu Tua. Memantulkan lebih sedikit cahaya.</p>
+                        <div class="flex h-8 rounded-lg overflow-hidden border border-slate-700">
+                            <div class="w-1/3 bg-black flex items-center justify-center text-[10px]">Hitam</div>
+                            <div class="w-1/3 bg-gray-800 flex items-center justify-center text-[10px]">Tua</div>
+                            <div class="w-1/3 bg-gray-600 flex items-center justify-center text-[10px]">Sedang</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-100 text-slate-800 p-5 rounded-2xl space-y-3 border">
+                        <h3 class="font-title text-lg text-slate-800">⬜ 2. Terang (Warna Muda)</h3>
+                        <p class="text-xs text-slate-600">Contoh: Putih & Abu-abu Muda. Memantulkan lebih banyak cahaya.</p>
+                        <div class="flex h-8 rounded-lg overflow-hidden border border-slate-300">
+                            <div class="w-1/3 bg-gray-300 flex items-center justify-center text-[10px]">Muda</div>
+                            <div class="w-1/3 bg-gray-100 flex items-center justify-center text-[10px]">Sangat Muda</div>
+                            <div class="w-1/3 bg-white flex items-center justify-center text-[10px] text-slate-800">Putih</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Light Simulation Canvas -->
+                <div class="bg-gradient-to-b from-slate-800 to-slate-900 p-6 rounded-3xl text-white space-y-4 text-center border-4 border-amber-400">
+                    <h3 class="font-title text-xl text-yellow-300">💡 Simulasi Interaktif: Cahaya & Bayangan Bola</h3>
+                    <p class="text-xs text-slate-300">Geser tombol di bawah untuk memindahkan arah sinar matahari / lampu!</p>
+
+                    <!-- Canvas -->
+                    <div class="relative w-full max-w-md mx-auto aspect-video bg-slate-950 rounded-2xl overflow-hidden border-2 border-slate-700">
+                        <canvas id="lightCanvas" class="w-full h-full"></canvas>
+                    </div>
+
+                    <!-- Slider Control -->
+                    <div class="max-w-md mx-auto space-y-3">
+                        <div class="flex items-center justify-between text-xs font-bold text-yellow-300">
+                            <span>☀️ Kiri</span>
+                            <span id="lightPosLabel">Posisi Cahaya: Tengah</span>
+                            <span>☀️ Kanan</span>
+                        </div>
+                        <input type="range" id="lightSlider" min="20" max="380" value="200" oninput="updateLightSimulation()" class="w-full accent-yellow-400 cursor-pointer">
+                        
+                        <div class="flex justify-center gap-2 pt-2">
+                            <button onclick="toggleLightOnOff()" id="btnLightToggle" class="bg-yellow-400 hover:bg-yellow-300 text-slate-900 px-4 py-2 rounded-xl text-xs font-bold">
+                                💡 MATIKAN CAHAYA
+                            </button>
+                            <button onclick="resetLightSimulation()" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-xl text-xs font-bold">
+                                🔄 COBA LAGI
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="flex justify-between items-center pt-4">
+                    <button onclick="navigateto('materi-4')" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-5 py-2.5 rounded-xl font-bold text-sm">
+                        <i class="fas fa-arrow-left mr-1"></i> Sebelumnya
+                    </button>
+                    <button onclick="navigateto('materi-6')" class="bg-amber-500 hover:bg-amber-600 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow">
+                        Selanjutnya <i class="fas fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- HALAMAN 7: MENGEKSPRESIKAN WARNA -->
+        <section id="page-materi-6" class="page-content hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 shadow-md border border-slate-100 space-y-6">
+                <div class="flex items-center justify-between border-b pb-4">
+                    <div class="flex items-center space-x-3">
+                        <span class="bg-rose-100 text-rose-600 font-title px-4 py-1.5 rounded-full text-sm">Materi 6</span>
+                        <h2 class="font-title text-2xl md:text-3xl text-slate-800">Warna Memiliki Kesan!</h2>
+                    </div>
+                    <button onclick="speakText('Materi 6: Warna dapat memengaruhi perasaan kita dan memberikan kesan yang berbeda.')" class="text-rose-500 text-xl p-2"><i class="fas fa-volume-up"></i></button>
+                </div>
+
+                <div class="bg-rose-50 border-2 border-rose-200 rounded-2xl p-4 text-slate-700">
+                    <p class="font-medium">
+                        ❤️ <strong>Warna</strong> dapat memengaruhi perasaan kita! Setiap warna memberikan kesan dan rasa yang unik.
+                    </p>
+                </div>
+
+                <!-- 3 Feelings Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Putih -->
+                    <div class="bg-white p-5 rounded-2xl border-2 border-slate-200 shadow-sm space-y-3">
+                        <div class="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-2xl">👕</div>
+                        <h3 class="font-title text-slate-800 text-lg">1. Putih</h3>
+                        <ul class="text-xs text-slate-600 space-y-1 list-disc pl-4">
+                            <li>Memberikan kesan <strong>bersih dan suci</strong>.</li>
+                            <li>Terlihat ringan dan sederhana.</li>
+                            <li>Terlalu banyak putih bisa berkesan dingin.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Merah Muda -->
+                    <div class="bg-pink-50 p-5 rounded-2xl border-2 border-pink-200 shadow-sm space-y-3">
+                        <div class="w-12 h-12 rounded-2xl bg-pink-100 flex items-center justify-center text-2xl">🌸</div>
+                        <h3 class="font-title text-pink-600 text-lg">2. Merah Muda</h3>
+                        <ul class="text-xs text-slate-600 space-y-1 list-disc pl-4">
+                            <li>Menggambarkan <strong>kasih sayang</strong>.</li>
+                            <li>Memberikan kesan <strong>lembut dan manis</strong>.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Merah -->
+                    <div class="bg-red-50 p-5 rounded-2xl border-2 border-red-200 shadow-sm space-y-3">
+                        <div class="w-12 h-12 rounded-2xl bg-red-100 flex items-center justify-center text-2xl">🏎️</div>
+                        <h3 class="font-title text-red-600 text-lg">3. Merah</h3>
+                        <ul class="text-xs text-slate-600 space-y-1 list-disc pl-4">
+                            <li>Menunjukkan <strong>semangat dan keberanian</strong>.</li>
+                            <li>Memberikan kesan <strong>kuat dan aktif</strong>.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Interactive Question -->
+                <div class="bg-yellow-50 border-2 border-yellow-200 p-5 rounded-2xl space-y-4">
+                    <h3 class="font-title text-yellow-800 text-lg">❓ Tanya Kak Warna: "Warna apa yang paling cocok menggambarkan SEMANGAT?"</h3>
+                    <div class="grid grid-cols-3 gap-3">
+                        <button onclick="checkFeelingAnswer('putih')" class="bg-white p-3 rounded-xl border border-yellow-300 font-bold text-slate-700 hover:bg-yellow-100">🤍 Putih</button>
+                        <button onclick="checkFeelingAnswer('pink')" class="bg-white p-3 rounded-xl border border-yellow-300 font-bold text-slate-700 hover:bg-yellow-100">🌸 Merah Muda</button>
+                        <button onclick="checkFeelingAnswer('merah')" class="bg-white p-3 rounded-xl border border-yellow-300 font-bold text-slate-700 hover:bg-yellow-100">❤️ Merah</button>
+                    </div>
+                    <div id="feelingFeedback" class="hidden p-3 rounded-xl font-bold text-center text-sm"></div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="flex justify-between items-center pt-4">
+                    <button onclick="navigateto('materi-5')" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-5 py-2.5 rounded-xl font-bold text-sm">
+                        <i class="fas fa-arrow-left mr-1"></i> Sebelumnya
+                    </button>
+                    <button onclick="navigateto('kuis')" class="bg-pink-500 hover:bg-pink-600 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow">
+                        Ke Kuis Cerdas <i class="fas fa-brain ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- HALAMAN 8: KUIS CERDAS -->
+        <section id="page-kuis" class="page-content hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 shadow-md border border-slate-100 space-y-6">
+                <!-- Quiz Header -->
+                <div class="flex items-center justify-between border-b pb-4">
+                    <div>
+                        <h2 class="font-title text-2xl md:text-3xl text-amber-500">💡 Kuis Cerdas Dunia Warna</h2>
+                        <p class="text-xs text-slate-500 font-semibold">Uji pemahaman materi Seni Rupa kamu!</p>
+                    </div>
+                    <div class="bg-amber-100 px-4 py-2 rounded-2xl text-amber-700 font-title text-sm">
+                        Skor: <span id="quizScore">0</span>
+                    </div>
+                </div>
+
+                <!-- Quiz Main Body -->
+                <div id="quizBox" class="space-y-6">
+                    <!-- Progress Bar -->
+                    <div class="flex items-center justify-between text-xs font-bold text-slate-500">
+                        <span id="quizProgressText">Soal 1 dari 20</span>
+                        <span id="quizPercentText">5%</span>
+                    </div>
+                    <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden border">
+                        <div id="quizProgressBar" class="bg-amber-400 h-full transition-all duration-300" style="width: 5%;"></div>
+                    </div>
+
+                    <!-- Question Card -->
+                    <div class="bg-amber-50 border-2 border-amber-200 rounded-2xl p-5 md:p-6 space-y-4">
+                        <h3 id="quizQuestion" class="font-title text-slate-800 text-lg md:text-xl">
+                            1. Apa yang dimaksud dengan warna?
+                        </h3>
+                        <div id="quizOptions" class="space-y-3">
+                            <!-- Options injected by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Instant Feedback -->
+                    <div id="quizFeedback" class="hidden p-4 rounded-2xl border space-y-1">
+                        <h4 id="quizFeedbackTitle" class="font-title text-base"></h4>
+                        <p id="quizFeedbackDesc" class="text-xs md:text-sm"></p>
+                    </div>
+
+                    <!-- Next Button -->
+                    <div id="quizNextBox" class="hidden text-right">
+                        <button onclick="nextQuizQuestion()" class="bg-amber-500 hover:bg-amber-600 text-white font-title px-6 py-3 rounded-2xl text-sm shadow">
+                            Soal Selanjutnya ➔
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quiz Results Box -->
+                <div id="quizResultBox" class="hidden text-center space-y-6 py-6">
+                    <div class="w-24 h-24 bg-amber-100 text-amber-500 rounded-full flex items-center justify-center text-5xl mx-auto shadow-inner">
+                        🏆
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="font-title text-3xl text-slate-800">Kuis Selesai!</h3>
+                        <p class="text-slate-600 font-medium">Hasil Kuis Petualangan Warna Kamu:</p>
+                    </div>
+
+                    <div class="max-w-md mx-auto bg-slate-50 border rounded-2xl p-4 grid grid-cols-2 gap-4">
+                        <div class="bg-white p-3 rounded-xl border">
+                            <p class="text-xs text-slate-400 font-bold">Total Skor</p>
+                            <p id="finalScoreText" class="font-title text-2xl text-amber-500">200</p>
+                        </div>
+                        <div class="bg-white p-3 rounded-xl border">
+                            <p class="text-xs text-slate-400 font-bold">Benar / Soal</p>
+                            <p id="finalCorrectText" class="font-title text-2xl text-emerald-500">20 / 20</p>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center gap-4">
+                        <button onclick="restartQuiz()" class="bg-amber-400 hover:bg-amber-500 text-slate-800 font-title px-6 py-3 rounded-2xl text-sm shadow">
+                            🔄 ULANGI KUIS
+                        </button>
+                        <button onclick="navigateto('hasil')" class="bg-emerald-500 hover:bg-emerald-600 text-white font-title px-6 py-3 rounded-2xl text-sm shadow">
+                            🏆 LIHAT HASIL
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- HALAMAN 9: GAME EDUKASI -->
+        <section id="page-game" class="page-content hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 shadow-md border border-slate-100 space-y-6">
+                <div class="flex items-center justify-between border-b pb-4">
+                    <div>
+                        <h2 class="font-title text-2xl md:text-3xl text-emerald-600">🎮 Misi Penyelamatan Warna</h2>
+                        <p class="text-xs text-slate-500 font-semibold">Bantu Kak Warna mengumpulkan bola warna ajaib!</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span id="gameLevelBadge" class="bg-emerald-100 text-emerald-700 font-title px-3 py-1 rounded-full text-xs">Level 1</span>
+                        <span id="gameScoreBadge" class="bg-yellow-100 text-yellow-700 font-title px-3 py-1 rounded-full text-xs">Skor: 0</span>
+                    </div>
+                </div>
+
+                <!-- Game Canvas & Overlay Screen -->
+                <div class="relative w-full aspect-[4/3] md:aspect-[16/9] max-w-3xl mx-auto bg-slate-900 rounded-3xl overflow-hidden border-4 border-emerald-400 shadow-lg">
+                    <canvas id="gameCanvas" class="w-full h-full block"></canvas>
+
+                    <!-- Start Overlay -->
+                    <div id="gameStartOverlay" class="absolute inset-0 bg-slate-900/90 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center text-white space-y-4">
+                        <div class="text-5xl animate-bounce">🎨</div>
+                        <h3 class="font-title text-2xl md:text-3xl text-yellow-300">Petualangan Bola Warna</h3>
+                        <p class="text-xs md:text-sm text-slate-200 max-w-md">
+                            Gerakkan keranjang warna untuk menangkap bola warna yang jatuh! Hindari bom abu-abu 💣!
+                        </p>
+                        <button onclick="startGameEngine()" class="btn-bounce bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-title px-8 py-3 rounded-full text-lg shadow-lg">
+                            ▶️ MULAI MAIN
+                        </button>
+                    </div>
+
+                    <!-- Level Complete / Game Over Overlay -->
+                    <div id="gameOverOverlay" class="hidden absolute inset-0 bg-slate-900/90 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center text-white space-y-4">
+                        <div id="gameOverIcon" class="text-5xl">🏆</div>
+                        <h3 id="gameOverTitle" class="font-title text-2xl text-yellow-300">Level Selesai!</h3>
+                        <p id="gameOverDesc" class="text-sm text-slate-200">Kamu mengumpulkan skor tinggi!</p>
+                        <button onclick="restartGameEngine()" class="bg-yellow-400 hover:bg-yellow-300 text-slate-900 font-title px-6 py-2.5 rounded-full text-sm shadow">
+                            🔄 MAIN LAGI
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Touch / Mobile Game Controls -->
+                <div class="flex justify-center items-center gap-6 md:hidden">
+                    <button id="btnTouchLeft" class="w-16 h-16 bg-emerald-500 text-white rounded-2xl text-2xl font-bold active:scale-95 shadow-md flex items-center justify-center">
+                        ◀
+                    </button>
+                    <span class="text-xs text-slate-400 font-bold">Tekan tombol untuk geser</span>
+                    <button id="btnTouchRight" class="w-16 h-16 bg-emerald-500 text-white rounded-2xl text-2xl font-bold active:scale-95 shadow-md flex items-center justify-center">
+                        ▶
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- HALAMAN 10: HASIL BELAJAR -->
+        <section id="page-hasil" class="page-content hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 shadow-md border border-slate-100 space-y-6">
+                <div class="text-center space-y-2 border-b pb-4">
+                    <h2 class="font-title text-3xl text-pink-500">🏆 Hasil Belajar & Lencana</h2>
+                    <p class="text-sm text-slate-600 font-medium">Lihat semua prestasi seni rupa yang telah kamu capai!</p>
+                </div>
+
+                <!-- Stats Summary -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="bg-pink-50 p-4 rounded-2xl border border-pink-200 text-center">
+                        <span class="text-2xl">📚</span>
+                        <p class="text-xs text-slate-500 font-bold mt-1">Materi Dibaca</p>
+                        <p id="statMateriCount" class="font-title text-xl text-pink-600">6 / 6</p>
+                    </div>
+                    <div class="bg-amber-50 p-4 rounded-2xl border border-amber-200 text-center">
+                        <span class="text-2xl">💡</span>
+                        <p class="text-xs text-slate-500 font-bold mt-1">Skor Kuis</p>
+                        <p id="statQuizScore" class="font-title text-xl text-amber-600">0</p>
+                    </div>
+                    <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-200 text-center">
+                        <span class="text-2xl">🎮</span>
+                        <p class="text-xs text-slate-500 font-bold mt-1">Level Game</p>
+                        <p id="statGameLevel" class="font-title text-xl text-emerald-600">Level 1</p>
+                    </div>
+                    <div class="bg-purple-50 p-4 rounded-2xl border border-purple-200 text-center">
+                        <span class="text-2xl">🏅</span>
+                        <p class="text-xs text-slate-500 font-bold mt-1">Lencana</p>
+                        <p id="statBadgeCount" class="font-title text-xl text-purple-600">3 Diterima</p>
+                    </div>
+                </div>
+
+                <!-- Badges Grid -->
+                <div class="space-y-3">
+                    <h3 class="font-title text-slate-800 text-lg">🎖️ Lencana Pencapaian Kamu:</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        <div class="bg-slate-50 p-4 rounded-2xl border flex items-center space-x-3">
+                            <div class="w-12 h-12 rounded-2xl bg-yellow-400 text-slate-900 flex items-center justify-center text-2xl shadow">🎨</div>
+                            <div>
+                                <h4 class="font-title text-sm text-slate-800">Jagoan Warna Primer</h4>
+                                <p class="text-[10px] text-slate-500">Mengenal Merah, Biru, dan Kuning.</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-50 p-4 rounded-2xl border flex items-center space-x-3">
+                            <div class="w-12 h-12 rounded-2xl bg-purple-500 text-white flex items-center justify-center text-2xl shadow">🧪</div>
+                            <div>
+                                <h4 class="font-title text-sm text-slate-800">Pesulap Campur Warna</h4>
+                                <p class="text-[10px] text-slate-500">Mencoba simulasi warna sekunder.</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-50 p-4 rounded-2xl border flex items-center space-x-3">
+                            <div class="w-12 h-12 rounded-2xl bg-amber-400 text-slate-900 flex items-center justify-center text-2xl shadow">💡</div>
+                            <div>
+                                <h4 class="font-title text-sm text-slate-800">Ahli Gelap Terang</h4>
+                                <p class="text-[10px] text-slate-500">Memahami bayangan & cahaya.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Positive Message -->
+                <div class="bg-gradient-to-r from-pink-400 to-purple-500 rounded-2xl p-6 text-white text-center space-y-2">
+                    <h3 class="font-title text-2xl">"Hebat Sekali, Teman-Teman! 🎉"</h3>
+                    <p class="text-sm">Kamu sudah belajar banyak tentang warna hari ini. Teruslah berlatih, menggambar, dan berkreasi!</p>
+                </div>
+
+                <!-- Navigation -->
+                <div class="flex justify-center gap-4 pt-2">
+                    <button onclick="navigateto('materi-1')" class="bg-blue-500 hover:bg-blue-600 text-white font-title px-6 py-2.5 rounded-xl text-sm shadow">
+                        📚 BELAJAR LAGI
+                    </button>
+                    <button onclick="navigateto('beranda')" class="bg-pink-500 hover:bg-pink-600 text-white font-title px-6 py-2.5 rounded-xl font-bold text-sm shadow">
+                        🏠 KEMBALI KE BERANDA
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER IDENTITAS PEMBUAT (MANDATORY ON ALL PAGES) -->
+    <footer class="bg-white border-t border-slate-200 py-4 mt-8 text-center">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
+            <p class="font-semibold text-slate-600">Petualangan Dunia Warna • Seni Rupa Kelas 1 SD/MI</p>
+            <div class="bg-slate-100 px-3 py-1 rounded-full font-title text-slate-700 border border-slate-300">
+                by Asrifah, S.Pd
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // State variables
+        let soundEnabled = true;
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+        let selectedPrimaryPicks = [];
+        let mixColor1 = null;
+        let mixColor2 = null;
+
+        // Navigation Engine
+        function navigateto(pageId) {
+            const pages = document.querySelectorAll('.page-content');
+            pages.forEach(p => p.classList.add('hidden'));
+
+            const targetPage = document.getElementById('page-' + pageId);
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // Specific page initializers
+            if (pageId === 'materi-5') {
+                setTimeout(initLightCanvas, 100);
+            } else if (pageId === 'game') {
+                setTimeout(initGameCanvas, 100);
+            }
+
+            // Play navigation sound
+            playSound('nav');
+        }
+
+        // Audio Synthesizer (Tone-like with Web Audio API)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (!soundEnabled) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (type === 'correct') {
+                    osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+                    osc.frequency.exponentialRampToValueAtTime(659.25, audioCtx.currentTime + 0.2); // E5
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.3);
+                } else if (type === 'wrong') {
+                    osc.frequency.setValueAtTime(220, audioCtx.currentTime); // A3
+                    osc.frequency.exponentialRampToValueAtTime(164.81, audioCtx.currentTime + 0.2); // E3
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.3);
+                } else if (type === 'nav') {
+                    osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.1);
+                }
+            } catch (e) {
+                console.log('Audio Context Error', e);
+            }
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const btn = document.getElementById('soundToggleBtn');
+            btn.innerHTML = soundEnabled ? 
+                '<i class="fas fa-volume-up text-pink-500"></i>' : 
+                '<i class="fas fa-volume-mute text-slate-400"></i>';
+        }
+
+        function speakText(text) {
+            if (!soundEnabled || !('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'id-ID';
+            utterance.rate = 0.9;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function speakKakWarna() {
+            const text = document.getElementById('kakWarnaText').innerText;
+            speakText(text);
+        }
+
+        // Page 2: Objects Detail
+        function showObjectDetail(title, colorName, emoji, desc) {
+            const box = document.getElementById('objectDetailBox');
+            document.getElementById('detailEmoji').innerText = emoji;
+            document.getElementById('detailTitle').innerText = title;
+            document.getElementById('detailDesc').innerText = desc;
+            box.classList.remove('hidden');
+            speakText(title + ". " + desc);
+            playSound('nav');
+        }
+
+        function checkRedMiniGame(isCorrect, msg) {
+            const fb = document.getElementById('redMiniFeedback');
+            fb.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-700', 'bg-red-100', 'text-red-700');
+            if (isCorrect) {
+                fb.classList.add('bg-emerald-100', 'text-emerald-700');
+                fb.innerText = "🎉 " + msg;
+                playSound('correct');
+                confetti({ particleCount: 40, spread: 60 });
+            } else {
+                fb.classList.add('bg-red-100', 'text-red-700');
+                fb.innerText = "❌ " + msg;
+                playSound('wrong');
+            }
+            speakText(msg);
+        }
+
+        // Page 3: Primary Colors Examples
+        function showPrimaryExamples(title, desc, hex) {
+            const box = document.getElementById('primaryExamplesBox');
+            box.classList.remove('hidden');
+            document.getElementById('primaryTitle').innerText = "Benda Berwarna " + title + " " + (title === 'Merah'?'🔴':title==='Biru'?'🔵':'🟡');
+            document.getElementById('primaryDesc').innerText = desc;
+            speakText("Benda berwarna " + title + ": " + desc);
+            playSound('nav');
+        }
+
+        function togglePrimaryPick(btn, color) {
+            if (selectedPrimaryPicks.includes(color)) {
+                selectedPrimaryPicks = selectedPrimaryPicks.filter(c => c !== color);
+                btn.classList.remove('border-purple-600', 'bg-purple-100');
+            } else {
+                if (selectedPrimaryPicks.length < 3) {
+                    selectedPrimaryPicks.push(color);
+                    btn.classList.add('border-purple-600', 'bg-purple-100');
+                }
+            }
+        }
+
+        function checkPrimaryPickAnswer() {
+            const fb = document.getElementById('primaryPickFeedback');
+            const correctSet = ['merah', 'kuning', 'biru'];
+            const isCorrect = selectedPrimaryPicks.length === 3 && selectedPrimaryPicks.every(c => correctSet.includes(c));
+
+            if (isCorrect) {
+                fb.className = "font-bold text-sm text-emerald-600";
+                fb.innerText = "🎉 Hebat! Merah, Kuning, dan Biru adalah warna primer!";
+                playSound('correct');
+                confetti({ particleCount: 50 });
+            } else {
+                fb.className = "font-bold text-sm text-red-500";
+                fb.innerText = "❌ Pilih 3 warna: Merah, Kuning, dan Biru ya!";
+                playSound('wrong');
+            }
+        }
+
+        // Page 4: Color Mixer
+        function selectMixColor(slot, hex, name) {
+            if (slot === 1) {
+                mixColor1 = { hex, name };
+                document.getElementById('labelColor1').innerText = name;
+            } else {
+                mixColor2 = { hex, name };
+                document.getElementById('labelColor2').innerText = name;
+            }
+
+            if (mixColor1 && mixColor2) {
+                calculateMixResult();
+            }
+        }
+
+        function calculateMixResult() {
+            const liquid = document.getElementById('mixLiquid');
+            const resultText = document.getElementById('labelMixResult');
+
+            liquid.style.height = "80%";
+            const c1 = mixColor1.name;
+            const c2 = mixColor2.name;
+
+            let resultHex = '#888888';
+            let resultName = 'Abu-abu';
+
+            if ((c1 === 'Merah' && c2 === 'Kuning') || (c1 === 'Kuning' && c2 === 'Merah')) {
+                resultHex = '#FF9F1C';
+                resultName = 'ORANYE 🍊';
+            } else if ((c1 === 'Biru' && c2 === 'Kuning') || (c1 === 'Kuning' && c2 === 'Biru')) {
+                resultHex = '#06D6A0';
+                resultName = 'HIJAU 🍃';
+            } else if ((c1 === 'Merah' && c2 === 'Biru') || (c1 === 'Biru' && c2 === 'Merah')) {
+                resultHex = '#8338EC';
+                resultName = 'UNGU 🍇';
+            } else if (c1 === c2) {
+                resultHex = mixColor1.hex;
+                resultName = c1.toUpperCase();
+            }
+
+            liquid.style.backgroundColor = resultHex;
+            resultText.innerText = resultName;
+            playSound('correct');
+            speakText(c1 + " dicampur " + c2 + " menjadi " + resultName);
+        }
+
+        function resetColorMixer() {
+            mixColor1 = null;
+            mixColor2 = null;
+            document.getElementById('labelColor1').innerText = "Pilih...";
+            document.getElementById('labelColor2').innerText = "Pilih...";
+            document.getElementById('mixLiquid').style.height = "0%";
+            document.getElementById('labelMixResult').innerText = "???";
+        }
+
+        // Page 6: 2D Canvas Sphere Light Simulation
+        let lightCanvas, lightCtx;
+        let isLightOn = true;
+
+        function initLightCanvas() {
+            lightCanvas = document.getElementById('lightCanvas');
+            if (!lightCanvas) return;
+            lightCanvas.width = 400;
+            lightCanvas.height = 225;
+            lightCtx = lightCanvas.getContext('2d');
+            drawLightSimulation();
+        }
+
+        function drawLightSimulation() {
+            if (!lightCtx) return;
+            const w = lightCanvas.width;
+            const h = lightCanvas.height;
+            const lightX = parseInt(document.getElementById('lightSlider').value);
+            const lightY = 40;
+
+            // Clear background
+            lightCtx.fillStyle = '#0f172a';
+            lightCtx.fillRect(0, 0, w, h);
+
+            // Draw Table
+            lightCtx.fillStyle = '#334155';
+            lightCtx.fillRect(0, 170, w, 55);
+
+            const sphereX = 200;
+            const sphereY = 130;
+            const sphereR = 40;
+
+            if (isLightOn) {
+                // Draw Shadow
+                lightCtx.save();
+                const shadowX = sphereX + (sphereX - lightX) * 0.6;
+                lightCtx.beginPath();
+                lightCtx.ellipse(shadowX, 175, sphereR * 0.9, 12, 0, 0, Math.PI * 2);
+                lightCtx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+                lightCtx.fill();
+                lightCtx.restore();
+
+                // Draw Sun / Light Source
+                lightCtx.beginPath();
+                lightCtx.arc(lightX, lightY, 15, 0, Math.PI * 2);
+                lightCtx.fillStyle = '#FFD166';
+                lightCtx.shadowColor = '#FFD166';
+                lightCtx.shadowBlur = 20;
+                lightCtx.fill();
+                lightCtx.shadowBlur = 0;
+
+                // Draw Sphere Gradient based on Light Position
+                const dx = lightX - sphereX;
+                const dy = lightY - sphereY;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                const gradX = sphereX + (dx / dist) * (sphereR * 0.5);
+                const gradY = sphereY + (dy / dist) * (sphereR * 0.5);
+
+                const grad = lightCtx.createRadialGradient(gradX, gradY, 4, sphereX, sphereY, sphereR);
+                grad.addColorStop(0, '#FF85A1'); // Light highlight
+                grad.addColorStop(0.4, '#EF476F'); // Main red
+                grad.addColorStop(1, '#590d22'); // Dark shadow side
+
+                lightCtx.beginPath();
+                lightCtx.arc(sphereX, sphereY, sphereR, 0, Math.PI * 2);
+                lightCtx.fillStyle = grad;
+                lightCtx.fill();
+            } else {
+                // Flat Dark Sphere
+                lightCtx.beginPath();
+                lightCtx.arc(sphereX, sphereY, sphereR, 0, Math.PI * 2);
+                lightCtx.fillStyle = '#3a0914';
+                lightCtx.fill();
+            }
+        }
+
+        function updateLightSimulation() {
+            const pos = parseInt(document.getElementById('lightSlider').value);
+            const label = document.getElementById('lightPosLabel');
+            if (pos < 150) label.innerText = "Posisi Cahaya: Kiri";
+            else if (pos > 250) label.innerText = "Posisi Cahaya: Kanan";
+            else label.innerText = "Posisi Cahaya: Tengah";
+            drawLightSimulation();
+        }
+
+        function toggleLightOnOff() {
+            isLightOn = !isLightOn;
+            document.getElementById('btnLightToggle').innerText = isLightOn ? "💡 MATIKAN CAHAYA" : "💡 NYALAKAN CAHAYA";
+            drawLightSimulation();
+        }
+
+        function resetLightSimulation() {
+            document.getElementById('lightSlider').value = 200;
+            isLightOn = true;
+            document.getElementById('btnLightToggle').innerText = "💡 MATIKAN CAHAYA";
+            updateLightSimulation();
+        }
+
+        function checkFeelingAnswer(type) {
+            const fb = document.getElementById('feelingFeedback');
+            fb.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-700', 'bg-red-100', 'text-red-700');
+            if (type === 'merah') {
+                fb.classList.add('bg-emerald-100', 'text-emerald-700');
+                fb.innerText = "🎉 Tepat Sekali! Warna merah melambangkan semangat dan keberanian!";
+                playSound('correct');
+                confetti({ particleCount: 40 });
+            } else {
+                fb.classList.add('bg-red-100', 'text-red-700');
+                fb.innerText = "💡 Warna ini bagus, tapi MERAH paling cocok untuk semangat!";
+                playSound('wrong');
+            }
+        }
+
+        // Page 8: Quiz Data (20 Questions)
+        const quizQuestions = [
+            { q: "Apa yang dimaksud dengan warna?", options: ["Kesan yang dilihat mata", "Suara yang didengar telinga", "Bau yang dicium hidung"], ans: 0, desc: "Warna adalah kesan yang ditangkap mata kita saat ada cahaya!" },
+            { q: "Manakah yang termasuk kelompok warna primer?", options: ["Merah, biru, kuning", "Oranye, hijau, ungu", "Hitam, putih, abu-abu"], ans: 0, desc: "Warna primer adalah warna utama: Merah, Biru, dan Kuning." },
+            { q: "Merah dicampur kuning menghasilkan warna apa?", options: ["Hijau", "Oranye", "Ungu"], ans: 1, desc: "Pencampuran merah dan kuning menghasilkan warna oranye!" },
+            { q: "Biru dicampur kuning menghasilkan warna apa?", options: ["Hijau", "Oranye", "Merah"], ans: 0, desc: "Biru dan kuning bercampur menjadi warna hijau segar!" },
+            { q: "Merah dicampur biru menghasilkan warna apa?", options: ["Oranye", "Hijau", "Ungu"], ans: 2, desc: "Merah dan biru bercampur menjadi warna ungu!" },
+            { q: "Kuning dicampur hijau menghasilkan warna tersier apa?", options: ["Kuning kehijauan", "Merah keoranyean", "Biru keunguan"], ans: 0, desc: "Kuning + Hijau = Kuning Kehijauan." },
+            { q: "Warna yang paling gelap dalam skala hitam hingga putih adalah...", options: ["Putih", "Hitam", "Abu-abu muda"], ans: 1, desc: "Hitam adalah warna paling gelap karena menyerap cahaya." },
+            { q: "Bagian bola yang terkena sinar cahaya biasanya terlihat...", options: ["Lebih terang", "Lebih gelap", "Selalu hitam"], ans: 0, desc: "Cahaya membuat permukaan benda terlihat lebih terang." },
+            { q: "Warna merah muda memberikan kesan...", options: ["Lembut dan kasih sayang", "Menakutkan", "Gelap dan dingin"], ans: 0, desc: "Merah muda memberikan kesan lembut dan penuh kasih sayang." },
+            { q: "Warna merah memberikan kesan...", options: ["Semangat dan keberanian", "Dingin dan tenang", "Tidak terlihat"], ans: 0, desc: "Merah melambangkan semangat dan keberanian!" },
+            { q: "Warna primer disebut juga warna...", options: ["Utama", "Kedua", "Campuran"], ans: 0, desc: "Primer artinya warna utama yang asli." },
+            { q: "Warna sekunder dibuat dengan mencampur dua warna...", options: ["Primer", "Tersier", "Gelap"], ans: 0, desc: "Warna sekunder berasal dari campuran 2 warna primer." },
+            { q: "Benda dapat terlihat warnanya jika ada...", options: ["Cahaya", "Suara", "Angin"], ans: 0, desc: "Tanpa cahaya, suasana akan gelap dan warna tidak terlihat." },
+            { q: "Warna putih memberikan kesan...", options: ["Bersih dan suci", "Gelap dan menyeramkan", "Sangat panas"], ans: 0, desc: "Putih memberi kesan bersih, terang, dan suci." },
+            { q: "Pisang yang sudah matang biasanya berwarna...", options: ["Kuning", "Biru", "Hitam"], ans: 0, desc: "Pisang matang berwarna kuning cerah!" },
+            { q: "Daun segar di pohon umumnya berwarna...", options: ["Hijau", "Merah", "Ungu"], ans: 0, desc: "Daun mengandung klorofil sehingga berwarna hijau." },
+            { q: "Merah keoranyean adalah contoh warna...", options: ["Tersier", "Primer", "Sekunder"], ans: 0, desc: "Merah keoranyean adalah campuran warna primer dan sekunder (tersier)." },
+            { q: "Bagian benda yang berada dalam bayangan terlihat lebih...", options: ["Gelap", "Terang", "Berkilau"], ans: 0, desc: "Bayangan terjadi karena terhalang cahaya sehingga tampak gelap." },
+            { q: "Langit yang cerah di siang hari berwarna...", options: ["Biru", "Merah", "Hitam"], ans: 0, desc: "Langit di siang hari tampak berwarna biru." },
+            { q: "Abu-abu tua tergolong ke dalam kelompok warna...", options: ["Gelap", "Terang", "Primer"], ans: 0, desc: "Abu-abu tua mendekati warna hitam sehingga tergolong gelap." }
+        ];
+
+        function loadQuizQuestion() {
+            const current = quizQuestions[currentQuizIndex];
+            document.getElementById('quizQuestion').innerText = (currentQuizIndex + 1) + ". " + current.q;
+            
+            // Progress Update
+            const total = quizQuestions.length;
+            const pct = Math.round(((currentQuizIndex + 1) / total) * 100);
+            document.getElementById('quizProgressText').innerText = `Soal ${currentQuizIndex + 1} dari ${total}`;
+            document.getElementById('quizPercentText').innerText = pct + "%";
+            document.getElementById('quizProgressBar').style.width = pct + "%";
+
+            // Options
+            const container = document.getElementById('quizOptions');
+            container.innerHTML = "";
+
+            current.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left bg-white hover:bg-amber-100 border-2 border-amber-200 p-4 rounded-2xl font-bold text-slate-700 transition flex items-center justify-between";
+                btn.innerHTML = `<span>${String.fromCharCode(65 + idx)}. ${opt}</span> <i class="fas fa-chevron-right text-amber-400"></i>`;
+                btn.onclick = () => answerQuiz(idx);
+                container.appendChild(btn);
+            });
+
+            document.getElementById('quizFeedback').classList.add('hidden');
+            document.getElementById('quizNextBox').classList.add('hidden');
+        }
+
+        function answerQuiz(selectedIdx) {
+            const current = quizQuestions[currentQuizIndex];
+            const isCorrect = selectedIdx === current.ans;
+
+            const fb = document.getElementById('quizFeedback');
+            const fbTitle = document.getElementById('quizFeedbackTitle');
+            const fbDesc = document.getElementById('quizFeedbackDesc');
+
+            fb.classList.remove('hidden', 'bg-emerald-100', 'border-emerald-300', 'bg-red-100', 'border-red-300');
+
+            if (isCorrect) {
+                quizScore += 10;
+                document.getElementById('quizScore').innerText = quizScore;
+                fb.classList.add('bg-emerald-100', 'border-emerald-300');
+                fbTitle.className = "font-title text-emerald-800";
+                fbTitle.innerText = "🎉 Benar Sekali!";
+                playSound('correct');
+            } else {
+                fb.classList.add('bg-red-100', 'border-red-300');
+                fbTitle.className = "font-title text-red-800";
+                fbTitle.innerText = "❌ Kurang Tepat!";
+                playSound('wrong');
+            }
+
+            fbDesc.innerText = current.desc;
+            document.getElementById('quizNextBox').classList.remove('hidden');
+
+            // Disable options
+            const btns = document.querySelectorAll('#quizOptions button');
+            btns.forEach(b => b.disabled = true);
+        }
+
+        function nextQuizQuestion() {
+            currentQuizIndex++;
+            if (currentQuizIndex < quizQuestions.length) {
+                loadQuizQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function finishQuiz() {
+            document.getElementById('quizBox').classList.add('hidden');
+            document.getElementById('quizResultBox').classList.remove('hidden');
+            document.getElementById('finalScoreText').innerText = quizScore;
+            document.getElementById('finalCorrectText').innerText = `${quizScore / 10} / ${quizQuestions.length}`;
+            
+            // Update Stats in Hasil Belajar
+            document.getElementById('statQuizScore').innerText = quizScore;
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+        }
+
+        function restartQuiz() {
+            currentQuizIndex = 0;
+            quizScore = 0;
+            document.getElementById('quizScore').innerText = "0";
+            document.getElementById('quizBox').classList.remove('hidden');
+            document.getElementById('quizResultBox').classList.add('hidden');
+            loadQuizQuestion();
+        }
+
+        // Page 9: Mini Game Engine
+        let gameCanvas, gameCtx;
+        let gameRunning = false;
+        let basketX = 150;
+        let basketWidth = 70;
+        let balls = [];
+        let gameScore = 0;
+        let gameAnimFrame;
+
+        function initGameCanvas() {
+            gameCanvas = document.getElementById('gameCanvas');
+            if (!gameCanvas) return;
+            gameCanvas.width = 600;
+            gameCanvas.height = 350;
+            gameCtx = gameCanvas.getContext('2d');
+
+            // Keyboard listeners
+            window.addEventListener('keydown', (e) => {
+                if (!gameRunning) return;
+                if (e.key === 'ArrowLeft' && basketX > 0) basketX -= 25;
+                if (e.key === 'ArrowRight' && basketX < gameCanvas.width - basketWidth) basketX += 25;
+            });
+
+            // Touch buttons listeners
+            const bLeft = document.getElementById('btnTouchLeft');
+            const bRight = document.getElementById('btnTouchRight');
+            if (bLeft && bRight) {
+                bLeft.onclick = () => { if (basketX > 0) basketX -= 30; };
+                bRight.onclick = () => { if (basketX < gameCanvas.width - basketWidth) basketX += 30; };
+            }
+        }
+
+        function startGameEngine() {
+            document.getElementById('gameStartOverlay').classList.add('hidden');
+            document.getElementById('gameOverOverlay').classList.add('hidden');
+            gameScore = 0;
+            balls = [];
+            basketX = 260;
+            gameRunning = true;
+            spawnGameBall();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function spawnGameBall() {
+            if (!gameRunning) return;
+            const colors = ['#EF476F', '#FFD166', '#118AB2', '#06D6A0', '#4A5568']; // 4 colors + 1 bomb
+            const randCol = colors[Math.floor(Math.random() * colors.length)];
+            balls.push({
+                x: Math.random() * (gameCanvas.width - 30) + 15,
+                y: -10,
+                speed: 2 + Math.random() * 2,
+                color: randCol,
+                isBomb: randCol === '#4A5568'
+            });
+
+            setTimeout(spawnGameBall, 1200);
+        }
+
+        function gameLoop() {
+            if (!gameRunning) return;
+
+            // Clear Canvas
+            gameCtx.fillStyle = '#0f172a';
+            gameCtx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+
+            // Draw Basket (Bucket)
+            gameCtx.fillStyle = '#FFD166';
+            gameCtx.beginPath();
+            gameCtx.roundRect(basketX, gameCanvas.height - 30, basketWidth, 25, 8);
+            gameCtx.fill();
+            gameCtx.fillStyle = '#118AB2';
+            gameCtx.font = '12px "Fredoka One"';
+            gameCtx.fillText("PALET", basketX + 18, gameCanvas.height - 13);
+
+            // Draw & Update Balls
+            for (let i = balls.length - 1; i >= 0; i--) {
+                const b = balls[i];
+                b.y += b.speed;
+
+                // Draw Ball
+                gameCtx.beginPath();
+                gameCtx.arc(b.x, b.y, 14, 0, Math.PI * 2);
+                gameCtx.fillStyle = b.color;
+                gameCtx.fill();
+
+                if (b.isBomb) {
+                    gameCtx.fillStyle = '#FFF';
+                    gameCtx.font = '10px sans-serif';
+                    gameCtx.fillText('💣', b.x - 6, b.y + 4);
+                }
+
+                // Collision Check
+                if (b.y >= gameCanvas.height - 45 && b.y <= gameCanvas.height - 10) {
+                    if (b.x >= basketX && b.x <= basketX + basketWidth) {
+                        if (b.isBomb) {
+                            playSound('wrong');
+                            gameScore = Math.max(0, gameScore - 10);
+                        } else {
+                            playSound('correct');
+                            gameScore += 10;
+                        }
+                        document.getElementById('gameScoreBadge').innerText = "Skor: " + gameScore;
+                        balls.splice(i, 1);
+                        continue;
+                    }
+                }
+
+                // Remove out of bounds
+                if (b.y > gameCanvas.height + 20) {
+                    balls.splice(i, 1);
+                }
+            }
+
+            if (gameScore >= 100) {
+                endGameEngine(true);
+                return;
+            }
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        function endGameEngine(win) {
+            gameRunning = false;
+            document.getElementById('gameOverOverlay').classList.remove('hidden');
+            if (win) {
+                document.getElementById('gameOverTitle').innerText = "🎉 Misi Berhasil!";
+                document.getElementById('gameOverDesc').innerText = "Kamu telah mengumpulkan 100 poin warna!";
+                confetti({ particleCount: 80 });
+            }
+        }
+
+        function restartGameEngine() {
+            startGameEngine();
+        }
+
+        window.onload = function() {
+            loadQuizQuestion();
+            initLightCanvas();
+            initGameCanvas();
+        };
+    </script>
+</body>
+</html>
